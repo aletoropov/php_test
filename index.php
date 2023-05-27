@@ -1,13 +1,14 @@
 <?php
 
-require "config.php";
-
-//TODO: сделать автозагрузку через Composer
-require "classes/Database.php";
-require "classes/Protocol.php";
+require "common.php";
 
 use classes\Protocol;
+use classes\Template;
 
 $protocol = new Protocol();
+$view = new Template();
 
-var_dump($protocol->getAll());
+$index = $view->render('index');
+$layout = $view->render('layout', ['content' => $index, 'title' => 'Тестовое задание']);
+
+echo $layout;
