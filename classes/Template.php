@@ -34,6 +34,7 @@ class Template
         ob_start();
 
         if (file_exists($this->tplPath  . $tpl . '.php')) {
+            extract($data);
             require($this->tplPath . $tpl . '.php');
         } else {
             throw new TemplateException($tpl . ' - шаблон не найден!');
