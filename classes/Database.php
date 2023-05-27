@@ -1,49 +1,34 @@
 <?php
+/**
+ * @author Торопов Александр <toropovsite@yandex.ru>
+ *
+ * Клас для работы с базой данных на основе PDO
+ */
+
 namespace classes;
 
 class Database
 {
-    private $pdo;
-    private $log = [];
-    private static $instance;
 
-    private function __construct()
-    {
-    }
+    public \PDO $pdo;
+    private array $log = [];
 
-    private function __clone()
-    {
-    }
-
-    public static function getInstance(): self
-    {
-        if (!self::$instance) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
-    /**
-     * @return PDO
-     */
-    private function getConnection()
+    public function __construct()
     {
         $host = DB_HOST;
         $dbName = DB_NAME;
         $dbUser = DB_USER;
         $dbPassword = DB_PASSWORD;
 
-        if (!$this->pdo) {
-            $this->pdo = new \PDO(
-                "mysql:host=$host;dbname=$dbName",
-                $dbUser,
-                $dbPassword,
-                [
-                    \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"
-                ]
-            );
-        }
+
+        $this->pdo = new \PDO(
+            "mysql:host=$host;dbname=$dbName",
+            $dbUser,
+            $dbPassword,
+            [
+                \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"
+            ]
+        );
 
         return $this->pdo;
     }
@@ -57,7 +42,7 @@ class Database
     public function fetchAll(string $query, $_method, array $params = [])
     {
         $time = microtime(true);
-        $prepared = $this->getConnection()->prepare($query);
+        $prepared = $this->pdo->prepare($query);
 
         $ret = $prepared->execute($params);
 
@@ -83,7 +68,7 @@ class Database
     public function fetchOne(string $query, $_method, array $params = [])
     {
         $t = microtime(true);
-        $prepared = $this->getConnection()->prepare($query);
+        $prepared = $this->pdo->prepare($query);
 
         $ret = $prepared->execute($params);
 
@@ -113,11 +98,9 @@ class Database
     public function exec(string $query, $_method, array $params = []): int
     {
         $t = microtime(1);
-        $pdo = $this->getConnection();
-        $prepared = $pdo->prepare($query);
+        $prepared = $this->pdo->prepare($query);
 
         $ret = $prepared->execute($params);
-
 
         if (!$ret) {
             $errorInfo = $prepared->errorInfo();
@@ -130,31 +113,4 @@ class Database
 
         return $affectedRows;
     }
-
-    public function lastInsertId()
-    {
-        return $this->getConnection()->lastInsertId();
-    }
-
-    public function errorInfo()
-    {
-        $this->errorInfo();
-    }
-
-    /**
-     * @return string
-     */
-    public function getLogHTML()
-    {
-        if (!$this->log) {
-            return '';
-        }
-        $res = '';
-        foreach ($this->log as $elem) {
-            $res = $elem[1] . ': ' . $elem[0] . ' (' . $elem[2] . ') [' . $elem[3] . ']' . "\n";
-        }
-        return '<pre>' . $res .'</pre>';
-    }
-
-
 }
