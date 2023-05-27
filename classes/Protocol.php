@@ -9,7 +9,7 @@ class Protocol
     {
         $db = Database::getInstance();
 
-        $select = "SELECT * FROM protocols";
+        $select = "SELECT * FROM protocol_table";
         return $db->fetchAll($select, __METHOD__);
     }
 
@@ -29,7 +29,7 @@ class Protocol
         if ($this->checkProtocolNumber($number)) {
             $errors[] = 'Номер протокола уже есть';
         } else {
-            $insert = "INSERT INTO protocols (`number`, `date`, `person`, `sing`) 
+            $insert = "INSERT INTO protocol_table (`number`, `date`, `person`, `sing`) 
                        VALUES (:number, :person, :sing, :sing)";
              if ($db->exec($insert, __METHOD__, [
                 ':number' => $number,
