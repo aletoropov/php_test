@@ -39,7 +39,7 @@ class Protocol
             ])) {
                  return true;
              } else {
-                 $errors[] = $db->errorInfo();
+                 $errors[] = $db->errorInfo()[2];
              }
 
         }
