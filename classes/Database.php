@@ -9,8 +9,16 @@ namespace classes;
 
 class Database
 {
-
+    /**
+     * @var \PDO
+     */
     public \PDO $pdo;
+
+    /**
+     * Для логирования
+     *
+     * @var array
+     */
     private array $log = [];
 
     public function __construct()
