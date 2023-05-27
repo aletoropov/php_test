@@ -136,6 +136,11 @@ class Database
         return $this->getConnection()->lastInsertId();
     }
 
+    public function errorInfo()
+    {
+        $this->errorInfo();
+    }
+
     /**
      * @return string
      */
