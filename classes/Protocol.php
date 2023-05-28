@@ -6,14 +6,25 @@ use classes\Database;
 class Protocol
 {
     /**
+     * @var \classes\Database
+     */
+    public Database $db;
+
+    /**
+     * Создаем соединение с базой данных
+     */
+    public function __construct()
+    {
+        $this->db = new Database();
+    }
+
+    /**
      * @return array|false
      */
     public function getAll()
     {
-        $db = new Database();
-
         $select = "SELECT * FROM protocol_table";
-        return $db->fetchAll($select, __METHOD__);
+        return $this->db->fetchAll($select, __METHOD__);
     }
 
     /**
@@ -25,8 +36,6 @@ class Protocol
      */
     public function addProtocol(int $number, string $date, string $person, string $sign)
     {
-        $db = new Database();
-
         $errors = array();
 
         if ($this->checkProtocolNumber($number)) {
@@ -35,12 +44,12 @@ class Protocol
             $insert = "INSERT INTO protocol_table (number, date, person, sign) 
                    VALUES (?, ?, ?, ?)";
 
-            $stmt = $db->pdo->prepare($insert);
+            $stmt = $this->db->pdo->prepare($insert);
 
             if ($stmt->execute([$number, $date, $person, $sign])) {
-                 return $db->pdo->lastInsertId();
+                 return $this->db->pdo->lastInsertId();
              } else {
-                 $errors[] = $db->pdo->errorInfo()[2];
+                 $errors[] = $this->db->pdo->errorInfo()[2];
              }
         }
 
@@ -53,9 +62,7 @@ class Protocol
      */
     private function checkProtocolNumber($number)
     {
-        $db = new Database();
-
         $select = "SELECT number FROM protocol_table WHERE `number` = :number";
-        return $db->fetchOne($select, __METHOD__, [':number' => $number]);
+        return $this->db->fetchOne($select, __METHOD__, [':number' => $number]);
     }
 }
