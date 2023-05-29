@@ -7,6 +7,7 @@ use classes\Template;
 
 $protocol = new Protocol();
 $view = new Template();
+$result = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $number  = (int)    filter_input(INPUT_POST, 'number');
