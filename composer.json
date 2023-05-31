@@ -1,0 +1,16 @@
+{
+    "name": "alext/protocol",
+    "description": "Тестовое задание на вакансию помощник веб-разработчика",
+    "autoload": {
+        "psr-4": {
+            "classes\\": "classes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alexandr Toropov",
+            "email": "toropovsite@yandex.ru"
+        }
+    ],
+    "require": {}
+}
